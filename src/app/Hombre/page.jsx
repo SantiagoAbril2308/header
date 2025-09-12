@@ -1,8 +1,12 @@
+
+
 export default function Hombre(){   
     return (
-     <div>
-
-        <h1>Hombre</h1>
-        </div>
+    <main className="main-background">
+        <div>
+            
+            <h1 className="text-white" >Hombre</h1>
+            </div>
+    </main>
     )
 }

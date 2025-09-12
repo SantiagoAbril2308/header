@@ -1,12 +1,19 @@
 "use client"
 
 import Link from "next/link";
+import Image from "next/image"
+
+
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 
-const Header = () => {
+const banner = '/hola.jpg'
+
+export default function Header(){
   return (
     <header className="bg-gray-800 text-white p-4">
-      <nav className="flex justify-between items-center max-w-7xl mx-auto">
+
+
+      <nav className="flex justify-between text-white mx-4 mt-6 relative">
         
         <div className="flex-1">
           <Link href="/" className="text-2xl font-bold hover:text-gray-300 transition duration-300">
@@ -22,12 +29,12 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link href="/hombre" className="hover:text-gray-300 transition duration-300">
+              <Link href="/Hombre" className="hover:text-gray-300 transition duration-300">
                 Hombre
               </Link>
             </li>
             <li>
-              <Link href="/mujeres" className="hover:text-gray-300 transition duration-300">
+              <Link href="/Mujeres" className="hover:text-gray-300 transition duration-300">
                 Mujeres
               </Link>
             </li>
@@ -35,7 +42,7 @@ const Header = () => {
         </div>
 
         <div className="flex-1 flex justify-end space-x-4">
-          <Link href="/cart" className="flex items-center hover:text-gray-300 transition duration-300">
+          <Link href="/carrito" className="flex items-center hover:text-gray-300 transition duration-300">
             <FaShoppingCart size={24} />
             <span className="ml-1 hidden sm:inline">Carrito</span>
           </Link>
@@ -48,5 +55,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;
