@@ -90,7 +90,13 @@ const LoginPage = () => {
             >
               Iniciar sesión
             </button>
+            <div className="mt-6 text-center text-sm">
+            <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+              ¿oldidaste tu contraseña?
+            </a>
+          </div>
           </form>
+
 
           {/* Separador y Login con Google */}
           <div className="relative mt-6">
