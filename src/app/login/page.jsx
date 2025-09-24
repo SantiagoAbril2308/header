@@ -3,18 +3,48 @@
 import React, { useState } from 'react';
 import Image from "next/image";
 
+
+
 const LoginPage = () => {
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Aquí puedes agregar la lógica para autenticar al usuario
-    alert(`Intentando iniciar sesión:\nEmail: ${email}`);
-    setEmail('');
-    setPassword('');
-  };
+const handleLogin = async (e)  => {
+  e.preventDefault();
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (response.status === 401) {
+    
+      window.location.href = '/inicio';
+      return;
+    }
+
+    if (!response.ok) {
+      setIsError(true);
+      setMessage('Error de autenticación.');
+      return;
+    }
+
+    const data = await response.json();
+    setMessage('Inicio de sesión exitoso. ¡Bienvenido!');
+    setIsError(false);
+    console.log('Usuario autenticado:', data.user);  
+  } catch (error) {
+    console.error('Error de red o del cliente:', error);
+    setIsError(true);
+    setMessage('Error de conexión. Intenta de nuevo.');
+  }
+  setEmail('');
+  setPassword('');
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
