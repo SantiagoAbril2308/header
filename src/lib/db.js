@@ -1,17 +1,13 @@
+import { Pool } from 'pg'
 
-
-import { Pool } from 'pg';
-
-let pool;
-
-if (!global._pgPool) {
-    global._pgPool = new Pool({
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-            rejectUnauthorized: false
-        }
-    });
-}
-pool = global._pgPool;
+const pool = new Pool(
+    {
+        host: 'localhost',
+        user: 'postgres',
+        password: '12345Syb.',
+        database: 'ecommerce',
+        port: 5432
+    }
+)
 
 export default pool;
