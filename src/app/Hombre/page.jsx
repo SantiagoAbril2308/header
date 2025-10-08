@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 export default function Hombre() {
-    // 1. Estado para el formulario de nuevo producto
+  
     const [newProduct, setNewProduct] = useState({
         name: '',
         description: '',
@@ -48,8 +48,8 @@ export default function Hombre() {
 
             if (response.status === 201) {
                 setMessage(`Producto "${result.name}" creado con éxito!`);
-                setNewProduct({ name: '', description: '', price: '', stock: '' }); // Limpiar formulario
-                // Si tienes la lógica del GET, podrías llamar a fetchProducts() aquí para actualizar la lista.
+                setNewProduct({ name: '', description: '', price: '', stock: '' }); 
+               
             } else if (response.status === 409) {
                 setMessage(` Error: ${result.message}`); 
             } else {
@@ -71,7 +71,7 @@ export default function Hombre() {
     useEffect(() => {
         async function fetchProducts() {
             try {
-                // Asegúrate de usar la URL correcta de tu API Handler
+                
                 const response = await fetch('/api/auth/login/products', {
                     method: 'GET',
                     headers: {
@@ -159,7 +159,6 @@ export default function Hombre() {
                         </div>
                     </div>
                     
-                    {/* Mensajes de feedback */}
                     {message && (
                         <p className={`p-2 rounded text-center ${message.startsWith('✅') ? 'bg-green-600' : 'bg-red-600'} text-white`}>
                             {message}

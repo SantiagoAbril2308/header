@@ -17,7 +17,6 @@ export async function POST(request) {
             return NextResponse.json({ message: 'Credenciales inválidas' }, { status: 401 });
         }
 
-        // Obtén el usuario sin la contraseña
         const result = await pool.query('SELECT * FROM usuario WHERE nombre = $1', [email]);
         const user = result.rows[0];
         const { pass, ...userWithoutPassword } = user;
