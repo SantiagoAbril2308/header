@@ -10,12 +10,19 @@ export default function Header(){
 
  
   return (
-    <header className="bg-[oklch(60%_0.118_184.704)] text-yellow-100 p-4 shadow-md">
-      <nav className="flex justify-between items-center mx-auto relative">
-        
+    <header className="relative bg-cover bg-center text-white shadow-md p-4 min-h-60"
+    style={{
+      backgroundImage: "url('portal.png')",
+      backgroundColor: "oklch(60% 0.118 184.704)", 
+      }}>
+
+    <div className="relative z-10 p-15 min-h-48">
+      <nav className="relative z-10 flex justify-between items-center mx-auto">
+
+
      
         <div className="flex-shrink-0">
-          <Link href="/inicio" className="text-2xl font-bold hover:text-amber-400 transition duration-300">
+          <Link href="/inicio" className="text-2xl font-bold hover:text-black transition duration-300">
             Mi Tienda
           </Link>
         </div>
@@ -24,7 +31,7 @@ export default function Header(){
         <div className="hidden md:flex flex-1 justify-center">
           <ul className="flex space-x-6 mx-auto">
             <li>
-              <Link href="/inicio" className={`font-sans text-xl font-bold hover:text-amber-400 transition duration-300`}>
+              <Link href="/inicio" className={`font-sans text-xl font-bold hover:text-black transition duration-300`}>
                 Inicio
               </Link>
             </li>
@@ -33,11 +40,11 @@ export default function Header(){
 
         
         <div className="flex items-center space-x-4">
-          <Link href="/carrito" className={`flex items-center hover:text-amber-400 transition duration-300`}>
+          <Link href="/carrito" className={`flex items-center hover:text-black transition duration-300`}>
             <FaShoppingCart size={24} />
             <span className="ml-1 hidden sm:inline">Carrito</span>
           </Link>
-          <Link href="/login" className={`flex items-center hover:text-amber-400 transition duration-300`}>
+          <Link href="/login" className={`flex items-center hover:text-black transition duration-300`}>
             <FaUserCircle size={24} />
             <span className="ml-1 hidden sm:inline">Login</span>
           </Link>
@@ -56,6 +63,7 @@ export default function Header(){
           </button>
         </div>
       </nav>
+      </div>
 
       <div 
         className={`md:hidden bg-[oklch(60%_0.118_184.704)] ${isMenuOpen ? 'block' : 'hidden'} border-t border-yellow-200 mt-4 pt-4`}
