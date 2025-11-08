@@ -1,10 +1,9 @@
 // src/app/productos/page.jsx
 import Image from 'next/image';
 import Link from 'next/link';
-// Importamos la conexión a la base de datos 'p_1'
-import db from '@/lib/db';
+import db from '@/lib/db'; // <--- LÍNEA CORREGIDA
 
-// Función para obtener TODOS los productos de la tabla 'productos'
+// Función para obtener TODOS los productos de la base de datos
 async function getAllProductsFromDB() {
   try {
     const query = `
@@ -17,7 +16,6 @@ async function getAllProductsFromDB() {
       ORDER BY nombre ASC
     `;
     
-    // Usamos las columnas de tu tabla
     const result = await db.query(query);
     return result.rows;
     
@@ -40,18 +38,16 @@ export default async function ProductsListPage() {
       {products.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-xl text-gray-600">No hay productos en el catálogo.</p>
-          <p className="text-sm text-gray-500 mt-2">Puedes añadir productos desde la página de Inicio/Admin.</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {products.map((product) => (
-            // El Link apunta a la página de detalle dinámica
             <Link key={product.id_product} href={`/productos/${product.id_product}`} className="group block">
               <div className="bg-white rounded-lg shadow-lg overflow-hidden transition duration-300 hover:shadow-xl hover:-translate-y-1">
                 
                 <div className="relative h-48 w-full">
                     <Image 
-                      src={product.image_url || '/hola.jpg'} // Usa la imagen de tu DB o un placeholder
+                      src={product.image_url || '/placeholder.jpg'} 
                       alt={product.nombre} 
                       fill 
                       style={{ objectFit: "cover" }}
@@ -71,6 +67,7 @@ export default async function ProductsListPage() {
           ))}
         </div>
       )}
+      
     </div>
   );
 }

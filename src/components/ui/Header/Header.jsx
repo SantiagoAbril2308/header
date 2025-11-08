@@ -4,28 +4,15 @@ import Link from "next/link";
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 
 export default function Header(){
+  // Para controlar la apertura/cierre del menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+ 
   return (
-<<<<<<< HEAD
     <header className="bg-[oklch(60%_0.118_184.704)] text-yellow-100 p-4 shadow-md">
       <nav className="flex justify-between items-center mx-auto relative">
         
-=======
-    <header className="relative bg-cover bg-center text-white shadow-md p-4 min-h-60"
-    style={{
-      backgroundImage: "url('portal.png')",
-      backgroundColor: "oklch(60% 0.118 184.704)", 
-      }}>
-
-    <div className="relative z-10 p-15 min-h-48">
-      <nav className="relative z-10 flex justify-between items-center mx-auto">
-
-
-     
->>>>>>> a421d12afeee7769a5b871ce1b0545ee2332d61e
         <div className="flex-shrink-0">
-          <Link href="/inicio" className="text-2xl font-bold hover:text-black transition duration-300">
+          <Link href="/inicio" className="text-2xl font-bold hover:text-amber-400 transition duration-300">
             Mi Tienda
           </Link>
         </div>
@@ -34,29 +21,28 @@ export default function Header(){
         <div className="hidden md:flex flex-1 justify-center">
           <ul className="flex space-x-6 mx-auto">
             <li>
-              <Link href="/inicio" className={`font-sans text-xl font-bold hover:text-black transition duration-300`}>
+              <Link href="/inicio" className={`font-sans text-xl font-bold hover:text-amber-400 transition duration-300`}>
                 Inicio
               </Link>
             </li>
             
-            {/* === INICIO: ENLACE AÑADIDO === */}
+            {/* === ENLACE AÑADIDO === */}
             <li>
               <Link href="/productos" className={`font-sans text-xl font-bold hover:text-amber-400 transition duration-300`}>
                 Productos
               </Link>
             </li>
-            {/* === FIN: ENLACE AÑADIDO === */}
             
           </ul>
         </div>
 
         
         <div className="flex items-center space-x-4">
-          <Link href="/carrito" className={`flex items-center hover:text-black transition duration-300`}>
+          <Link href="/carrito" className={`flex items-center hover:text-amber-400 transition duration-300`}>
             <FaShoppingCart size={24} />
             <span className="ml-1 hidden sm:inline">Carrito</span>
           </Link>
-          <Link href="/login" className={`flex items-center hover:text-black transition duration-300`}>
+          <Link href="/login" className={`flex items-center hover:text-amber-400 transition duration-300`}>
             <FaUserCircle size={24} />
             <span className="ml-1 hidden sm:inline">Login</span>
           </Link>
@@ -74,7 +60,6 @@ export default function Header(){
           </button>
         </div>
       </nav>
-      </div>
 
       {/* === NAVEGACIÓN MÓVIL (MENÚ HAMBURGUESA) === */}
       <div 
@@ -91,7 +76,7 @@ export default function Header(){
             </Link>
           </li>
           
-          {/* === INICIO: ENLACE AÑADIDO === */}
+          {/* === ENLACE AÑADIDO === */}
           <li>
             <Link 
               href="/productos" 
@@ -101,7 +86,6 @@ export default function Header(){
               Productos
             </Link>
           </li>
-          {/* === FIN: ENLACE AÑADIDO === */}
           
           <li className="p-2 border-t border-yellow-200">
             <Link href="/carrito" className={`block hover:text-amber-400`} onClick={() => setIsMenuOpen(false)}>Carrito</Link>
