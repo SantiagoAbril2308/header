@@ -3,24 +3,20 @@ import { useState } from 'react';
 import Link from "next/link";
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
 
-
 export default function Header(){
-  // Para controlar la apertura/cierre del menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
- 
   return (
     <header className="bg-[oklch(60%_0.118_184.704)] text-yellow-100 p-4 shadow-md">
       <nav className="flex justify-between items-center mx-auto relative">
         
-     
         <div className="flex-shrink-0">
           <Link href="/inicio" className="text-2xl font-bold hover:text-amber-400 transition duration-300">
             Mi Tienda
           </Link>
         </div>
 
-        
+        {/* === NAVEGACIÓN DESKTOP === */}
         <div className="hidden md:flex flex-1 justify-center">
           <ul className="flex space-x-6 mx-auto">
             <li>
@@ -28,6 +24,15 @@ export default function Header(){
                 Inicio
               </Link>
             </li>
+            
+            {/* === INICIO: ENLACE AÑADIDO === */}
+            <li>
+              <Link href="/productos" className={`font-sans text-xl font-bold hover:text-amber-400 transition duration-300`}>
+                Productos
+              </Link>
+            </li>
+            {/* === FIN: ENLACE AÑADIDO === */}
+            
           </ul>
         </div>
 
@@ -47,7 +52,6 @@ export default function Header(){
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
-            {/* Icono de hamburguesa o X */}
             {isMenuOpen ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg> 
             ) : (
@@ -57,6 +61,7 @@ export default function Header(){
         </div>
       </nav>
 
+      {/* === NAVEGACIÓN MÓVIL (MENÚ HAMBURGUESA) === */}
       <div 
         className={`md:hidden bg-[oklch(60%_0.118_184.704)] ${isMenuOpen ? 'block' : 'hidden'} border-t border-yellow-200 mt-4 pt-4`}
       >
@@ -70,7 +75,19 @@ export default function Header(){
               Inicio
             </Link>
           </li>
-          {/* Opcional: Si quieres Carrito/Login en el menú desplegable */}
+          
+          {/* === INICIO: ENLACE AÑADIDO === */}
+          <li>
+            <Link 
+              href="/productos" 
+              className={`block p-2 text-xl font-bold hover:text-amber-400`}
+              onClick={() => setIsMenuOpen(false)} 
+            >
+              Productos
+            </Link>
+          </li>
+          {/* === FIN: ENLACE AÑADIDO === */}
+          
           <li className="p-2 border-t border-yellow-200">
             <Link href="/carrito" className={`block hover:text-amber-400`} onClick={() => setIsMenuOpen(false)}>Carrito</Link>
           </li>
