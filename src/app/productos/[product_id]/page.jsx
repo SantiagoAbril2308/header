@@ -41,18 +41,17 @@ async function getProductDataFromDB(productId) {
   }
 }
 
-
 // ==========================================================
 // INICIO DE LA CORRECCIÓN (Error de Next.js 15)
 // ==========================================================
 
-// 1. Recibimos 'props' enteras, sin destructurar { params }
-export default async function ProductDetailPage(props) {
+// 1. Recibimos { params } como antes
+export default async function ProductDetailPage({ params }) {
 
-  // 2. Accedemos al 'product_id' directamente desde 'props'
-  const product_id = props.params.product_id;
+  // 2. AHORA SÍ: Await params PARA OBTENER el objeto síncrono
+  const { product_id } = await params; 
   
-  // 3. Ahora llamamos a la base de datos
+  // 3. Ahora 'product_id' es una variable normal y se puede usar
   const product = await getProductDataFromDB(product_id);
   
 // ==========================================================
@@ -76,7 +75,7 @@ export default async function ProductDetailPage(props) {
         
         <div className="flex flex-col md:flex-row gap-10 bg-white p-6 rounded-xl shadow-2xl">
           
-          <div className="md:w-1/2 lg:w-2/5 flex flex-col items-center">
+          <div className="md:w-1f/2 lg:w-2/5 flex flex-col items-center">
             <div className="relative w-full aspect-square rounded-lg overflow-hidden border border-gray-200">
               <Image
                 src={product.image_url || '/placeholder.jpg'}
