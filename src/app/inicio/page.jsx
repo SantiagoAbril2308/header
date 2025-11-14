@@ -112,7 +112,7 @@ const AdminCatalogo = () => {
             <h1 className="text-3xl font-extrabold mb-8 text-gray-900 text-center">
                 🛒 Catálogo y Administración de Productos
             </h1>
-           {/* 
+           
             <div className="bg-white p-6 rounded-xl shadow-2xl max-w-xl mx-auto mb-10 border-t-4 border-indigo-600">
                 <h2 className="text-2xl font-bold mb-4 text-gray-800">Crear Nuevo Producto</h2>
                 
@@ -200,7 +200,7 @@ const AdminCatalogo = () => {
                     </button>
                 </form>
             </div>
-*/}
+
             <hr className="mb-10"/>
 
             {/* --- SECCIÓN DE FILTROS Y BÚSQUEDA --- */}
