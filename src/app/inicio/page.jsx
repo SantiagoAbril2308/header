@@ -1,8 +1,8 @@
 'use client'; 
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useProductsData } from '../../hooks/useProducts';
 
-// Lista de categorías para los botones de filtro y el selector del formulario
 export const categories = [
     "Todos", 
     "Hombre", 
@@ -11,57 +11,22 @@ export const categories = [
 ];
 
 const AdminCatalogo = () => {
-    // --- ESTADOS DE DATOS Y FILTROS ---
-    const [products, setProducts] = useState([]); // Almacena todos los productos cargados de PostgreSQL
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+   
+    const { products, loading, error, setProducts } = useProductsData();
     const [activeCategory, setActiveCategory] = useState('Todos');
     const [searchTerm, setSearchTerm] = useState('');
-
-    // --- ESTADOS DEL FORMULARIO DE CREACIÓN (POST) ---
+ 
     const [newProduct, setNewProduct] = useState({
         name: '',
         description: '',
-        category: 'Hombre', // Valor por defecto
+        category: 'Hombre',
         price: '',
         stock: ''
     });
+
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // ----------------------------------------------------
-    // --- FUNCIÓN DE CARGA INICIAL DE DATOS (GET a API) ---
-    // ----------------------------------------------------
-    useEffect(() => {
-        async function fetchProducts() {
-            try {
-                // Llama al endpoint GET de tu API
-                const response = await fetch('/api/auth/login/products', { 
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error al cargar los datos: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                setProducts(data); 
-
-            } catch (err) {
-                console.error("Fallo la carga de productos:", err);
-                setError(err.message); 
-            } finally {
-                setLoading(false); 
-            }
-        }
-
-        fetchProducts();
-    }, []); 
-
-    // ----------------------------------------------------
-    // --- LÓGICA DE FILTRADO (useMemo) ---
-    // ----------------------------------------------------
     const filtroProducts = useMemo(() => {
         let list = products;
 
@@ -81,9 +46,6 @@ const AdminCatalogo = () => {
         return list;
     }, [activeCategory, searchTerm, products]);
 
-    // ----------------------------------------------------
-    // --- LÓGICA DEL FORMULARIO (POST a API/PostgreSQL) ---
-    // ----------------------------------------------------
     const handleChange = (e) => {
         const { name, value } = e.target;
         setNewProduct(prev => ({
@@ -104,7 +66,7 @@ const AdminCatalogo = () => {
         };
         
         if (isNaN(dataToSend.price) || isNaN(dataToSend.stock)) {
-             setMessage('❌ Error: El precio y el stock deben ser números válidos.');
+             setMessage('Error: El precio y el stock deben ser números válidos.');
              setIsSubmitting(false);
              return;
         }
@@ -120,29 +82,28 @@ const AdminCatalogo = () => {
             const result = await response.json();
 
             if (response.status === 201) {
-                // AGREGAR a la lista local (PostgreSQL devuelve el objeto mapeado)
+            
                 setProducts(prev => [...prev, result]); 
 
                 setMessage(`✅ Producto "${result.name || dataToSend.name}" creado y guardado con éxito!`);
-                // Limpiar formulario
+               
                 setNewProduct({ name: '', description: '', category: 'Hombre', price: '', stock: '' }); 
                 
             } else if (response.status === 409) {
-                setMessage(`❌ Error (409): El producto ya existe. ${result.message}`); 
+                setMessage(`Error (409): El producto ya existe. ${result.message}`); 
             } else {
-                setMessage(`❌ Error al crear: ${result.message || response.statusText}`);
+                setMessage(`Error al crear: ${result.message || response.statusText}`);
             }
 
         } catch (error) {
             console.error('Fallo el envío del producto:', error);
-            setMessage('❌ Error de conexión con el servidor.');
+            setMessage('Error de conexión con el servidor.');
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    // --- Renderizado de Componente ---
-
+    // Los estados loading y error vienen del hook
     if (loading) return <div className="container mx-auto p-4 md:p-8 text-center text-gray-700">Cargando productos de PostgreSQL...</div>;
     if (error) return <div className="container mx-auto p-4 md:p-8 text-center text-red-600">Error al cargar: {error}</div>;
 
@@ -151,14 +112,12 @@ const AdminCatalogo = () => {
             <h1 className="text-3xl font-extrabold mb-8 text-gray-900 text-center">
                 🛒 Catálogo y Administración de Productos
             </h1>
-            
-            {/* --- SECCIÓN DEL FORMULARIO DE CREACIÓN --- */}
+           {/* 
             <div className="bg-white p-6 rounded-xl shadow-2xl max-w-xl mx-auto mb-10 border-t-4 border-indigo-600">
                 <h2 className="text-2xl font-bold mb-4 text-gray-800">Crear Nuevo Producto</h2>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     
-                    {/* Nombre y Descripción */}
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
                         <input 
@@ -182,48 +141,48 @@ const AdminCatalogo = () => {
                         />
                     </div>
 
-                    {/* Categoría, Precio, Stock */}
+                 
                     <div className="grid grid-cols-3 gap-4">
-                         <div>
-                            <label htmlFor="category" className="block text-sm font-medium text-gray-700">Categoría</label>
-                            <select
-                                id="category"
-                                name="category"
-                                value={newProduct.category}
-                                onChange={handleChange}
-                                required
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-lg"
-                            >
-                                {categories.slice(1).map(cat => ( // Excluye "Todos"
-                                    <option key={cat} value={cat}>{cat}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Precio ($)</label>
-                            <input 
-                                type="number" 
-                                id="price" 
-                                name="price" 
-                                value={newProduct.price} 
-                                onChange={handleChange} 
-                                required 
-                                step="0.01"
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
-                            <input 
-                                type="number" 
-                                id="stock" 
-                                name="stock" 
-                                value={newProduct.stock} 
-                                onChange={handleChange} 
-                                required 
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-lg"
-                            />
-                        </div>
+                            <div>
+                                <label htmlFor="category" className="block text-sm font-medium text-gray-700">Categoría</label>
+                                <select
+                                    id="category"
+                                    name="category"
+                                    value={newProduct.category}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                                >
+                                    {categories.slice(1).map(cat => ( // Excluye "Todos"
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label htmlFor="price" className="block text-sm font-medium text-gray-700">Precio ($)</label>
+                                <input 
+                                    type="number" 
+                                    id="price" 
+                                    name="price" 
+                                    value={newProduct.price} 
+                                    onChange={handleChange} 
+                                    required 
+                                    step="0.01"
+                                    className="w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
+                                <input 
+                                    type="number" 
+                                    id="stock" 
+                                    name="stock" 
+                                    value={newProduct.stock} 
+                                    onChange={handleChange} 
+                                    required 
+                                    className="w-full mt-1 p-2 border border-gray-300 rounded-lg"
+                                />
+                            </div>
                     </div>
                     
                     {message && (
@@ -241,7 +200,7 @@ const AdminCatalogo = () => {
                     </button>
                 </form>
             </div>
-
+*/}
             <hr className="mb-10"/>
 
             {/* --- SECCIÓN DE FILTROS Y BÚSQUEDA --- */}
