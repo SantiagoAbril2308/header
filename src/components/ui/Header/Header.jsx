@@ -2,10 +2,13 @@
 import { useState } from 'react';
 import Link from "next/link";
 import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import { useCart } from '../../../hooks/CartContext';
 
 export default function Header(){
   // Para controlar la apertura/cierre del menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { getTotalItems } = useCart();
+  const cartCount = getTotalItems();
  
   return (
     <header className="bg-[oklch(60%_0.118_184.704)] text-yellow-100 p-4 shadow-md">
@@ -37,28 +40,38 @@ export default function Header(){
         </div>
 
         
-        <div className="flex items-center space-x-4">
-          <Link href="/carrito" className={`flex items-center hover:text-amber-400 transition duration-300`}>
-            <FaShoppingCart size={24} />
-            <span className="ml-1 hidden sm:inline">Carrito</span>
+       <div className="flex items-center space-x-4">
+ 
+          <Link href="/carrito" className={`relative flex items-center hover:text-amber-400 transition duration-300`}>
+          <FaShoppingCart size={24} />
+                    
+                      {cartCount > 0 && (
+                          <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 
+                                          bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 
+                                          flex items-center justify-center border-2 border-current">
+                              {cartCount}
+                          </span>
+                      )}
+          <span className="ml-1 hidden">Carrito</span>
           </Link>
+          
           <Link href="/login" className={`flex items-center hover:text-amber-400 transition duration-300`}>
-            <FaUserCircle size={24} />
-            <span className="ml-1 hidden sm:inline">Login</span>
+          <FaUserCircle size={24} />
+          <span className="ml-1 hidden sm:inline">Login</span>
           </Link>
 
-          <button 
-            className="md:hidden p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg> 
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            )}
-          </button>
-        </div>
+ <button 
+    className="md:hidden p-2"
+   onClick={() => setIsMenuOpen(!isMenuOpen)}
+    aria-label="Toggle menu"
+   >
+    {isMenuOpen ? (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg> 
+    ) : (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+   )}
+ </button>
+ </div>
       </nav>
 
       {/* === NAVEGACIÓN MÓVIL (MENÚ HAMBURGUESA) === */}

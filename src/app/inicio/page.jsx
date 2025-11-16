@@ -108,6 +108,7 @@ const AdminCatalogo = () => {
     if (error) return <div className="container mx-auto p-4 md:p-8 text-center text-red-600">Error al cargar: {error}</div>;
 
     return (
+    <main className="min-h-screen bg-gray-50 p-8">
         <div className="container mx-auto p-4 md:p-8 ">
             <h1 className="text-3xl font-extrabold mb-8 text-gray-900 text-center">
                 🛒 Catálogo y Administración de Productos
@@ -274,6 +275,7 @@ const AdminCatalogo = () => {
                 </div>
             )}
         </div>
+        </main>
     );
 };
 

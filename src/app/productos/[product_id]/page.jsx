@@ -2,10 +2,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import db from '@/lib/db'; 
+import AddButton from '@/components/AddButton'; // Importa el componente cliente
 
-// La función de la base de datos (getProductDataFromDB) está perfecta, no la toques.
+
 async function getProductDataFromDB(productId) {
   try {
+    // Consulta para obtener el producto principal
     const productQuery = `
       SELECT
         id_product, nombre, precio, stock, descripcion, image_url, related_ids
@@ -20,6 +22,7 @@ async function getProductDataFromDB(productId) {
     
     const product = result.rows[0];
     
+    // Consulta para obtener productos relacionados si existen
     product.relatedProducts = [];
     if (product.related_ids && product.related_ids.length > 0) {
         const relatedQuery = `
@@ -31,38 +34,31 @@ async function getProductDataFromDB(productId) {
         product.relatedProducts = relatedResult.rows;
     }
     
+    // Formatear la descripción
     if (typeof product.descripcion === 'string') {
         product.descripcion = product.descripcion.split('\n');
     }
     return product;
   } catch (error) {
     console.error('Error al obtener producto de PostgreSQL:', error);
+    // En producción, podrías lanzar un error más genérico o registrarlo.
     return null; 
   }
 }
 
-// ==========================================================
-// INICIO DE LA CORRECCIÓN (Error de Next.js 15)
-// ==========================================================
-
-// 1. Recibimos { params } como antes
 export default async function ProductDetailPage({ params }) {
 
-  // 2. AHORA SÍ: Await params PARA OBTENER el objeto síncrono
+  // Obtener el ID del producto de los parámetros de la ruta
   const { product_id } = await params; 
   
-  // 3. Ahora 'product_id' es una variable normal y se puede usar
+  // Obtener los datos del producto
   const product = await getProductDataFromDB(product_id);
   
-// ==========================================================
-// FIN DE LA CORRECCIÓN
-// ==========================================================
-
   if (!product) {
     return (
       <div className="text-center py-20 bg-gray-50 min-h-screen">
         <h1 className="text-3xl font-bold text-red-600">Producto no encontrado.</h1>
-         <p className="mt-4 text-gray-700">El producto con ID **{product_id}** no existe.</p>
+        <p className="mt-4 text-gray-700">El producto con ID **{product_id}** no existe.</p>
       </div>
     );
   }
@@ -75,6 +71,7 @@ export default async function ProductDetailPage({ params }) {
         
         <div className="flex flex-col md:flex-row gap-10 bg-white p-6 rounded-xl shadow-2xl">
           
+          {/* Sección de Imagen */}
           <div className="md:w-1f/2 lg:w-2/5 flex flex-col items-center">
             <div className="relative w-full aspect-square rounded-lg overflow-hidden border border-gray-200">
               <Image
@@ -87,6 +84,7 @@ export default async function ProductDetailPage({ params }) {
               />
             </div>
           </div>
+          
           
           <div className="md:w-1/2 lg:w-3/5 space-y-6">
             
@@ -103,9 +101,10 @@ export default async function ProductDetailPage({ params }) {
               </span>
             </div>
 
-            <button className="w-full py-4 px-6 bg-red-600 text-white font-bold text-xl rounded-lg shadow-xl hover:bg-red-700 transition duration-300 transform hover:scale-[1.01]">
-              🛒 Agregar al Carrito
-            </button>
+            <AddButton 
+                productId={product.id_product} 
+                stock={product.stock}
+            />
             
             <section className="pt-4 border-t">
               <h2 className="text-xl font-bold text-gray-900 mb-3">Descripción Detallada</h2>
@@ -118,6 +117,7 @@ export default async function ProductDetailPage({ params }) {
             
           </div>
         </div>
+        
         
         {product.relatedProducts && product.relatedProducts.length > 0 && (
             <section className="mt-16">
