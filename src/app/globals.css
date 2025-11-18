@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@layer base {
+  /* Reseteo estricto de márgenes */
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 body {
   @apply bg-[oklch(97.7%_0.013_236.62)] text-gray-900;
 }
